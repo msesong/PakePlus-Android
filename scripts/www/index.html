@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
 <title>宋氏长支族谱</title>
 <style>
 *{
@@ -433,6 +433,13 @@ h3{
 .space-right{
     padding-right:2em;
 }
+
+table {
+  table-layout: auto;
+  width: max-content;
+}
+
+
 @media(max-width:480px){  
 .info-modal{
     font-size: 115%;  
@@ -3752,5 +3759,34 @@ function hideModal(){
   }
 })();
 </script>
+
+<script>
+// 修复安卓原生WebView 滚动容器内table首次渲染宽度错误
+window.addEventListener('load', function () {
+  setTimeout(function () {
+    const tables = document.querySelectorAll('.scroll-container table, div[style*="overflow-x:auto"] table');
+    tables.forEach(function(table) {
+      // 保存原始display
+      const originDisplay = table.style.display;
+      table.style.display = 'none';
+      table.offsetWidth; // 强制回流，读取布局
+      table.style.display = originDisplay;
+
+      // 额外触发外层滚动容器重计算
+      const wrap = table.closest('div[style*="overflow-x:auto"]');
+      if(wrap) {
+        wrap.style.width = wrap.clientWidth + 'px';
+        wrap.style.width = '';
+      }
+    })
+  }, 600);
+})
+</script>
+
+
+
+
+
+
 </body>
 </html>
